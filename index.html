@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yousuf Alam — Engineer · Creator · Competitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── VARIABLES ── */
+:root {
+  --purple-dark:#6B21A8; --purple-mid:#7C3AED; --purple-light:#A855F7;
+  --blue-dark:#1E3A8A;   --blue-mid:#2563EB;   --blue-light:#60A5FA;
+  --bg:#020409; --bg2:#060b14;
+  --white:#F8FAFC; --muted:#94A3B8;
+  --font-display:'Orbitron',sans-serif;
+  --font-heading:'Syne',sans-serif;
+  --font-body:'Inter',sans-serif;
+}
+
+/* ── BASE ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--font-body);overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--purple-mid);border-radius:2px}
+
+/* ── GLOBAL NEURAL NET CANVAS ── */
+#neural-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+  width:100vw;height:100vh;
+}
+
+/* ── SCANLINE OVERLAY ── */
+#scanlines{
+  position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,transparent 3px,
+    rgba(0,180,255,0.018) 3px,rgba(0,180,255,0.018) 4px
+  );
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.2rem 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(180deg,rgba(2,4,9,0.95) 0%,transparent 100%);
+  backdrop-filter:blur(8px);
+}
+.nav-logo{font-family:var(--font-display);font-size:.85rem;letter-spacing:.2em;color:var(--blue-light)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-family:var(--font-heading);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--blue-light)}
+
+/* ── SECTION BASE ── */
+section{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;padding:6rem 2rem;z-index:10;
+}
+.section-inner{position:relative;z-index:10;max-width:1100px;width:100%;margin:0 auto}
+.section-label{
+  font-family:var(--font-display);font-size:.65rem;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--blue-light);margin-bottom:1.2rem;opacity:.8
+}
+
+/* ── HOLOGRAPHIC HEADING EFFECTS ── */
+.section-title{
+  font-family:var(--font-heading);font-size:clamp(2.5rem,6vw,5rem);
+  font-weight:800;line-height:1.05;margin-bottom:2rem;
+  animation:crtFlicker 7s linear infinite;
+  transition:filter .3s;cursor:default;
+}
+.section-title:hover{
+  filter:drop-shadow(2px 0 rgba(255,40,80,.35)) drop-shadow(-2px 0 rgba(0,200,255,.35));
+}
+@keyframes crtFlicker{
+  0%,89%,100%{opacity:1}
+  90%{opacity:.82}91%{opacity:1}94%{opacity:.9}95%{opacity:1}
+  97%{opacity:.85}98%{opacity:1}
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-50px);transition:opacity .9s ease,transform .9s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(50px);transition:opacity .9s ease,transform .9s ease}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.delay-1{transition-delay:.15s!important}.delay-2{transition-delay:.3s!important}
+.delay-3{transition-delay:.45s!important}.delay-4{transition-delay:.6s!important}
+
+/* ── 1. HERO ── */
+#hero{
+  min-height:100vh;flex-direction:column;text-align:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(13,11,46,.75) 0%,rgba(2,4,9,.7) 70%);
+}
+#hero-canvas{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center}
+.hero-eyebrow{
+  font-family:var(--font-display);font-size:.7rem;letter-spacing:.5em;
+  text-transform:uppercase;color:var(--blue-light);margin-bottom:1.5rem;
+  opacity:0;animation:fadeInDown 1s ease .5s forwards
+}
+.hero-name{
+  font-family:var(--font-display);font-size:clamp(3rem,10vw,9rem);
+  font-weight:900;letter-spacing:.05em;line-height:1;
+  background:linear-gradient(135deg,#fff 0%,#60A5FA 40%,#A855F7 80%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  opacity:0;animation:heroNameIn 1.4s cubic-bezier(.16,1,.3,1) .8s forwards
+}
+.hero-subtitle{
+  font-family:var(--font-heading);font-size:clamp(1rem,2.5vw,1.6rem);
+  font-weight:600;letter-spacing:.2em;color:var(--muted);margin-top:1.5rem;
+  opacity:0;animation:fadeInUp 1s ease 1.6s forwards
+}
+.hero-subtitle span{color:var(--blue-light)}
+.hero-scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:10;
+  font-family:var(--font-display);font-size:.6rem;letter-spacing:.3em;color:var(--muted);
+  opacity:0;animation:fadeInUp 1s ease 2.5s forwards;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem
+}
+.scroll-arrow{width:1px;height:40px;background:linear-gradient(180deg,var(--blue-light),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes heroNameIn{from{opacity:0;filter:blur(20px);transform:scale(.95)}to{opacity:1;filter:blur(0);transform:scale(1)}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ── 2. ABOUT ── */
+#about{background:linear-gradient(160deg,rgba(6,11,20,.92) 0%,rgba(8,0,18,.92) 100%)}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.orb-1{width:400px;height:400px;background:radial-gradient(circle,rgba(124,58,237,.25) 0%,transparent 70%);top:-100px;left:-100px;animation:orbFloat1 8s ease-in-out infinite}
+.orb-2{width:300px;height:300px;background:radial-gradient(circle,rgba(37,99,235,.2) 0%,transparent 70%);bottom:-80px;right:10%;animation:orbFloat2 11s ease-in-out infinite}
+.orb-3{width:200px;height:200px;background:radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 70%);top:40%;left:60%;animation:orbFloat3 7s ease-in-out infinite}
+@keyframes orbFloat1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.1)}66%{transform:translate(-20px,40px) scale(.95)}}
+@keyframes orbFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-40px) scale(1.15)}}
+@keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,50px)}}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-text p{font-size:1.05rem;color:var(--muted);line-height:1.9;margin-bottom:1.5rem}
+.about-text p strong{color:var(--white)}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.stat-card{background:rgba(255,255,255,.03);border:1px solid rgba(96,165,250,.15);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color .3s,transform .3s}
+.stat-card:hover{border-color:rgba(168,85,247,.4);transform:translateY(-4px)}
+.stat-number{font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--blue-light)}
+.stat-label{font-size:.75rem;color:var(--muted);letter-spacing:.08em;margin-top:.3rem}
+
+/* ── 3. ESPORTS ── */
+#esports{background:linear-gradient(180deg,rgba(6,0,15,.93) 0%,rgba(10,0,16,.93) 50%,rgba(6,0,16,.93) 100%);overflow:hidden}
+#esports-canvas{position:absolute;inset:0;z-index:1;pointer-events:none}
+/* HUD scanline overlay on esports */
+#esports::after{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 6px,rgba(96,165,250,.04) 6px,rgba(96,165,250,.04) 7px);
+}
+.esports-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.rank-badge{display:inline-flex;align-items:center;gap:.8rem;background:linear-gradient(135deg,rgba(107,33,168,.3),rgba(37,99,235,.2));border:1px solid rgba(168,85,247,.4);border-radius:8px;padding:.6rem 1.2rem;margin-bottom:1.5rem}
+.rank-dot{width:10px;height:10px;border-radius:50%;background:var(--purple-light);box-shadow:0 0 10px var(--purple-light);animation:rankPulse 2s ease-in-out infinite}
+@keyframes rankPulse{0%,100%{box-shadow:0 0 10px var(--purple-light)}50%{box-shadow:0 0 25px var(--purple-light),0 0 40px rgba(168,85,247,.3)}}
+.rank-text{font-family:var(--font-display);font-size:.75rem;letter-spacing:.2em;color:var(--purple-light)}
+.esports-visual{position:relative;height:420px;overflow:hidden}
+.tag-list{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem}
+.tag{font-family:var(--font-display);font-size:.65rem;letter-spacing:.15em;padding:.4rem .9rem;border-radius:4px;border:1px solid rgba(96,165,250,.3);color:var(--blue-light);background:rgba(37,99,235,.08)}
+
+/* SVG Operators */
+.operator-wrap{
+  position:absolute;top:0;display:flex;flex-direction:column;align-items:center;
+  transform:translateY(-220px);opacity:0;
+  animation:rappelDown 14s ease-in-out infinite;
+}
+.operator-wrap:nth-child(1){left:10%;animation-delay:0s}
+.operator-wrap:nth-child(2){left:28%;animation-delay:2.5s}
+.operator-wrap:nth-child(3){left:46%;animation-delay:5s}
+.operator-wrap:nth-child(4){left:64%;animation-delay:1.5s}
+.operator-wrap:nth-child(5){left:80%;animation-delay:3.8s}
+@keyframes rappelDown{
+  0%{transform:translateY(-220px);opacity:0}
+  8%{opacity:1}
+  35%{transform:translateY(80px);animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+  50%{transform:translateY(85px) translateX(5px)}
+  65%{transform:translateY(82px) translateX(-4px)}
+  80%{transform:translateY(84px) translateX(0px);opacity:1}
+  92%{opacity:1}
+  100%{transform:translateY(-220px);opacity:0}
+}
+.op-rope{
+  width:2px;height:80px;
+  background:linear-gradient(180deg,rgba(96,165,250,.8),rgba(96,165,250,.3));
+  box-shadow:0 0 6px rgba(96,165,250,.5);
+  flex-shrink:0;
+}
+.op-svg{width:62px;height:auto;flex-shrink:0}
+.muzzle-flash{
+  position:absolute;
+  width:18px;height:18px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,200,50,1) 0%,rgba(255,100,0,.6) 40%,transparent 70%);
+  opacity:0;
+  pointer-events:none;
+}
+
+/* ── 4. CONTENT CREATION ── */
+#content{background:linear-gradient(160deg,rgba(0,8,20,.92) 0%,rgba(5,0,16,.92) 100%)}
+.screen-glow{position:absolute;width:600px;height:400px;background:radial-gradient(ellipse,rgba(37,99,235,.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:screenGlow 4s ease-in-out infinite;pointer-events:none}
+@keyframes screenGlow{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.monitor-frame{background:rgba(0,0,0,.8);border:2px solid rgba(96,165,250,.3);border-radius:12px;padding:1.5rem;box-shadow:0 0 40px rgba(37,99,235,.2),inset 0 0 60px rgba(37,99,235,.05);animation:monitorPulse 4s ease-in-out infinite}
+@keyframes monitorPulse{0%,100%{box-shadow:0 0 40px rgba(37,99,235,.2),inset 0 0 60px rgba(37,99,235,.05)}50%{box-shadow:0 0 80px rgba(37,99,235,.4),inset 0 0 80px rgba(37,99,235,.1)}}
+.monitor-topbar{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid rgba(96,165,250,.15)}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot-r{background:#FF5F57}.dot-y{background:#FFBD2E}.dot-g{background:#28CA41}
+.monitor-content{font-family:var(--font-display);font-size:.7rem}
+.monitor-line{color:#4ADE80;margin-bottom:.3rem}
+.monitor-line span{color:var(--blue-light)}
+.monitor-cursor{display:inline-block;width:8px;height:14px;background:var(--blue-light);vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.platform-cards{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem}
+.platform-card{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(96,165,250,.1);border-radius:10px;padding:1rem 1.2rem;transition:border-color .3s,background .3s}
+.platform-card:hover{border-color:rgba(96,165,250,.3);background:rgba(37,99,235,.05)}
+.platform-icon{font-size:1.6rem}
+.platform-name{font-family:var(--font-heading);font-weight:700;font-size:1rem}
+.platform-sub{font-size:.8rem;color:var(--muted)}
+.platform-stat{margin-left:auto;font-family:var(--font-display);font-size:.8rem;color:var(--blue-light)}
+
+/* ── 5. HOBBIES ── */
+#hobbies{background:linear-gradient(160deg,rgba(0,5,16,.92) 0%,rgba(8,0,32,.92) 100%);overflow:hidden}
+#space-battle-canvas{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hobbies-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.lego-set-list{display:flex;flex-direction:column;gap:.6rem;margin-top:1rem}
+.lego-set{display:flex;align-items:center;gap:.8rem;font-size:.9rem;color:var(--muted);padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);transition:color .3s}
+.lego-set:hover{color:var(--white)}
+.lego-set::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--purple-light);flex-shrink:0}
+.hobby-card{background:rgba(255,255,255,.03);border:1px solid rgba(168,85,247,.15);border-radius:14px;padding:2rem;margin-bottom:1.5rem}
+.hobby-card-title{font-family:var(--font-heading);font-weight:700;font-size:1.2rem;margin-bottom:.5rem;color:var(--purple-light)}
+
+/* ── 6. ACHIEVEMENTS ── */
+#achievements{background:linear-gradient(180deg,rgba(6,0,15,.92) 0%,rgba(0,8,20,.92) 100%)}
+.achievements-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:3rem}
+.achievement-card{position:relative;background:rgba(255,255,255,.03);border:1px solid rgba(96,165,250,.12);border-radius:16px;padding:2rem;overflow:hidden;transition:transform .3s,border-color .3s}
+.achievement-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple-mid),var(--blue-mid));opacity:0;transition:opacity .3s}
+.achievement-card:hover{transform:translateY(-6px);border-color:rgba(168,85,247,.3)}
+.achievement-card:hover::before{opacity:1}
+.achievement-icon{font-size:2.2rem;margin-bottom:1rem}
+.achievement-title{font-family:var(--font-heading);font-weight:700;font-size:1.1rem;margin-bottom:.5rem}
+.achievement-detail{font-size:.85rem;color:var(--muted);line-height:1.7}
+.achievement-note{font-size:.78rem;color:var(--blue-light);margin-top:.5rem;font-style:italic;opacity:.85}
+.achievement-medal{position:absolute;top:1.2rem;right:1.2rem;font-family:var(--font-display);font-size:.6rem;letter-spacing:.1em;padding:.25rem .7rem;border-radius:20px;border:1px solid}
+.medal-gold{color:#FBBF24;border-color:#FBBF24;background:rgba(251,191,36,.1)}
+.medal-silver{color:#CBD5E1;border-color:#CBD5E1;background:rgba(203,213,225,.1)}
+.medal-blue{color:var(--blue-light);border-color:var(--blue-light);background:rgba(96,165,250,.1)}
+
+/* ── 7. SKILLS ── */
+#skills{background:linear-gradient(160deg,rgba(0,8,20,.92) 0%,rgba(5,0,15,.92) 100%)}
+.skills-container{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
+.skill-bar-group{margin-bottom:1.8rem}
+.skill-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.skill-name{font-family:var(--font-heading);font-weight:600;font-size:.95rem}
+.skill-track{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.skill-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple-mid),var(--blue-light));width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.lang-cloud{display:flex;flex-wrap:wrap;gap:.8rem}
+.lang-tag{font-family:var(--font-heading);font-weight:600;font-size:.9rem;padding:.5rem 1.2rem;border-radius:30px;border:1px solid rgba(168,85,247,.3);background:rgba(107,33,168,.1);color:var(--purple-light);transition:all .3s}
+.lang-tag:hover{background:rgba(107,33,168,.3);border-color:var(--purple-light);transform:translateY(-2px)}
+
+/* ── 8. CONTACT ── */
+#contact{background:linear-gradient(160deg,rgba(5,0,15,.92) 0%,rgba(2,4,9,.95) 100%);text-align:center;min-height:80vh}
+.contact-glow{position:absolute;width:600px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.2) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:screenGlow 5s ease-in-out infinite;pointer-events:none}
+.contact-links{display:flex;flex-direction:column;gap:1.5rem;align-items:center;margin:3rem 0}
+.contact-link{display:flex;align-items:center;gap:1rem;font-family:var(--font-heading);font-size:1.1rem;font-weight:600;color:var(--muted);text-decoration:none;transition:color .3s}
+.contact-link:hover{color:var(--white)}
+.contact-link-icon{font-size:1.4rem}
+.cta-button{display:inline-flex;align-items:center;gap:.8rem;padding:1rem 2.5rem;font-family:var(--font-display);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--white);background:linear-gradient(135deg,var(--purple-dark),var(--blue-dark));border:1px solid rgba(168,85,247,.4);border-radius:8px;text-decoration:none;margin-top:1rem;transition:all .3s;box-shadow:0 0 30px rgba(124,58,237,.3);cursor:pointer}
+.cta-button:hover{box-shadow:0 0 60px rgba(124,58,237,.6),0 0 100px rgba(37,99,235,.2);transform:translateY(-2px);border-color:var(--purple-light)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:2rem;font-family:var(--font-display);font-size:.6rem;letter-spacing:.2em;color:rgba(148,163,184,.3);background:var(--bg);position:relative;z-index:10}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .about-grid,.esports-grid,.content-grid,.hobbies-grid,.skills-container{grid-template-columns:1fr;gap:2.5rem}
+  .about-stats{grid-template-columns:1fr 1fr}
+  .esports-visual{height:260px}
+  .achievements-grid{grid-template-columns:1fr}
+  section{padding:5rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Scanlines -->
+<div id="scanlines"></div>
+<!-- Global Neural Network Canvas -->
+<canvas id="neural-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Y · A</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#esports">Esports</a></li>
+    <li><a href="#content">Content</a></li>
+    <li><a href="#hobbies">Hobbies</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ══ 1. HERO ══ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Portfolio · 2026</p>
+    <h1 class="hero-name">YOUSUF<br>ALAM</h1>
+    <p class="hero-subtitle"><span>Engineer</span> · <span>Creator</span> · <span>Competitor</span></p>
+  </div>
+  <div class="hero-scroll-hint"><span>SCROLL</span><div class="scroll-arrow"></div></div>
+</section>
+
+<!-- ══ 2. ABOUT ══ -->
+<section id="about">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <p class="section-label reveal">Who I Am</p>
+        <h2 class="section-title reveal delay-1">Built to<br><span style="color:var(--blue-light)">Build</span></h2>
+        <div class="about-text reveal delay-2">
+          <p><strong>18-year-old mechanical engineering student</strong> at Raritan Valley Community College, New Jersey. Born in New Jersey, raised in Bahrain, with roots in India.</p>
+          <p>Builder of things — digital and physical. Driven by curiosity, competition, and craft. When I'm not in the lab or classroom, I'm behind a controller, a camera, or a pile of LEGO bricks.</p>
+          <p>I compete at the highest levels I can reach — on a game server, a debate stage, or a chess board. Excellence isn't a destination — it's a standard.</p>
+        </div>
+      </div>
+      <div class="about-stats reveal-right delay-1">
+        <div class="stat-card"><div class="stat-number">18</div><div class="stat-label">Years Old</div></div>
+        <div class="stat-card"><div class="stat-number">4</div><div class="stat-label">Languages</div></div>
+        <div class="stat-card"><div class="stat-number">4.5K+</div><div class="stat-label">Subscribers</div></div>
+        <div class="stat-card"><div class="stat-number">29+</div><div class="stat-label">Awards Won</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 3. ESPORTS ══ -->
+<section id="esports">
+  <canvas id="esports-canvas"></canvas>
+  <!-- SVG Operators injected by JS -->
+  <div id="operators-container" style="position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden"></div>
+  <div class="section-inner" style="z-index:5">
+    <div class="esports-grid">
+      <div>
+        <p class="section-label reveal">Competitive Gaming</p>
+        <h2 class="section-title reveal delay-1"><span style="color:var(--purple-light)">Cipher 6</span><br>Esports</h2>
+        <div class="rank-badge reveal delay-2"><div class="rank-dot"></div><span class="rank-text">Peak: Diamond 3</span></div>
+        <p class="reveal delay-2" style="color:var(--muted);line-height:1.9;margin-bottom:1rem;">IGL (In-Game Leader) and Support operator for <strong style="color:var(--white)">Cipher 6</strong> in Rainbow Six Siege. I call the plays under pressure — reading enemy strategies, adapting in real-time, and orchestrating coordinated team executes.</p>
+        <p class="reveal delay-3" style="color:var(--muted);line-height:1.9;">Tactical thinking isn't just a game skill. It's a mindset — pattern recognition, rapid adaptation, and clear communication in high-stakes moments.</p>
+        <div class="tag-list reveal delay-4">
+          <span class="tag">IGL</span><span class="tag">Shot Caller</span><span class="tag">Support Ops</span><span class="tag">Diamond 3</span><span class="tag">R6 Siege</span>
+        </div>
+      </div>
+      <div class="esports-visual reveal-right">
+        <!-- Crosshair -->
+        <div style="position:relative;width:220px;height:220px;margin:0 auto">
+          <div style="position:absolute;inset:0;border:2px solid rgba(168,85,247,.3);border-radius:50%;animation:ringPulse 3s ease-in-out infinite"></div>
+          <div style="position:absolute;inset:20px;border:2px solid rgba(96,165,250,.3);border-radius:50%;animation:ringPulse 3s ease-in-out -1s infinite"></div>
+          <div style="position:absolute;inset:40px;border:2px solid rgba(168,85,247,.5);border-radius:50%;animation:ringPulse 3s ease-in-out -2s infinite"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;width:2px;height:60%;background:var(--purple-light);opacity:.6"></div>
+            <div style="position:absolute;width:60%;height:2px;background:var(--purple-light);opacity:.6"></div>
+            <div style="width:8px;height:8px;background:var(--blue-light);border-radius:50%;box-shadow:0 0 20px var(--blue-light);animation:centerBlink 1.5s ease-in-out infinite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.05);opacity:1}}
+@keyframes centerBlink{0%,100%{box-shadow:0 0 10px var(--blue-light)}50%{box-shadow:0 0 30px var(--blue-light),0 0 50px rgba(96,165,250,.4)}}
+</style>
+
+<!-- ══ 4. CONTENT CREATION ══ -->
+<section id="content">
+  <div class="screen-glow"></div>
+  <div class="section-inner">
+    <div class="content-grid">
+      <div>
+        <p class="section-label reveal">Digital Presence</p>
+        <h2 class="section-title reveal delay-1">Content<br><span style="color:var(--blue-light)">Creator</span></h2>
+        <p class="reveal delay-2" style="color:var(--muted);line-height:1.9;margin-bottom:1.5rem;">Under the banner <strong style="color:var(--white)">YusiDraco</strong>, I create gaming content across YouTube and Twitch — building a community around competitive gameplay, highlights, and authentic commentary.</p>
+        <p class="reveal delay-3" style="color:var(--muted);line-height:1.9;">Editing with Filmora. Every frame is intentional — storytelling through footage, not just recording.</p>
+        <div class="platform-cards reveal delay-4">
+          <div class="platform-card"><span class="platform-icon">▶</span><div><div class="platform-name">YouTube</div><div class="platform-sub">Gaming Content · Highlights</div></div><span class="platform-stat">4,500+ subs</span></div>
+          <div class="platform-card"><span class="platform-icon">◈</span><div><div class="platform-name">Twitch</div><div class="platform-sub">Live Streams · R6 Siege</div></div><span class="platform-stat">YusiDraco</span></div>
+        </div>
+      </div>
+      <div class="reveal-right delay-1">
+        <div class="monitor-frame">
+          <div class="monitor-topbar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <div class="monitor-content">
+            <div class="monitor-line">$ <span>channel</span> --status</div>
+            <div class="monitor-line" style="color:#A855F7">▶ YusiDraco — ONLINE</div>
+            <div class="monitor-line">$ <span>subscribers</span></div>
+            <div class="monitor-line" style="color:#4ADE80">  4,500+ and climbing</div>
+            <div class="monitor-line">$ <span>content</span> --type</div>
+            <div class="monitor-line" style="color:#60A5FA">  Gaming · Esports · Edits</div>
+            <div class="monitor-line">$ <span>tools</span></div>
+            <div class="monitor-line" style="color:#A855F7">  Filmora · OBS · Twitch Studio</div>
+            <div class="monitor-line">$ <span style="color:#4ADE80">_</span><span class="monitor-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 5. HOBBIES ══ -->
+<section id="hobbies">
+  <canvas id="space-battle-canvas"></canvas>
+  <div class="section-inner">
+    <div class="hobbies-grid">
+      <div>
+        <p class="section-label reveal">Collections &amp; Builds</p>
+        <h2 class="section-title reveal delay-1">The<br><span style="color:var(--purple-light)">Builder</span></h2>
+        <p class="reveal delay-2" style="color:var(--muted);line-height:1.9;margin-bottom:1.5rem;">LEGO isn't a hobby — it's a language. The patience, spatial reasoning, and attention to detail that goes into a 7,500-piece UCS set translates directly to engineering and problem-solving.</p>
+        <div class="hobby-card reveal delay-3">
+          <div class="hobby-card-title">UCS Star Wars Collection</div>
+          <div class="lego-set-list">
+            <div class="lego-set">Republic Venator-class Star Destroyer</div>
+            <div class="lego-set">Millennium Falcon</div>
+            <div class="lego-set">Razor Crest</div>
+            <div class="lego-set">TIE Interceptor</div>
+            <div class="lego-set">AT-ST Walker</div>
+            <div class="lego-set">Slave I — Jango Fett's Firespray</div>
+            <div class="lego-set" style="color:var(--purple-light);font-size:.82rem;padding-top:.6rem;border-top:1px solid rgba(168,85,247,.15);margin-top:.4rem">Helmet Collection: Mandalorian · Darth Vader · Boba Fett · Stormtrooper · Luke Skywalker Red Five · AT-AT Driver</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right delay-1">
+        <div class="hobby-card" style="margin-bottom:0">
+          <div class="hobby-card-title" style="color:var(--blue-light)">Other Interests</div>
+          <p style="color:var(--muted);line-height:1.8;font-size:.95rem;margin-top:.5rem">Chess — 3× First Place (former competitor).<br>Arabic language &amp; Islamic studies.<br>Quran recitation — competition-level.</p>
+        </div>
+        <div class="hobby-card" style="margin-top:1.5rem;margin-bottom:0">
+          <div class="hobby-card-title" style="color:var(--blue-light)">The Bigger Picture</div>
+          <p style="color:var(--muted);line-height:1.8;font-size:.95rem;margin-top:.5rem">Born in New Jersey, raised in Bahrain, with roots in India. Every interest feeds every other interest — the discipline of chess, the creativity of LEGO, the strategy of esports. It's all connected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 6. ACHIEVEMENTS ══ -->
+<section id="achievements">
+  <div class="section-inner">
+    <p class="section-label reveal" style="text-align:center">Recognition</p>
+    <h2 class="section-title reveal delay-1" style="text-align:center">Milestones &amp;<br><span style="color:var(--blue-light)">Awards</span></h2>
+    <div class="achievements-grid">
+      <div class="achievement-card reveal delay-1">
+        <span class="achievement-medal medal-gold">1st Place</span>
+        <div class="achievement-icon">🔬</div>
+        <div class="achievement-title">High School Science Fair</div>
+        <div class="achievement-detail">First place in regional science fair. Research, methodology, and presentation judged at the highest level.</div>
+      </div>
+      <div class="achievement-card reveal delay-2">
+        <span class="achievement-medal medal-gold">11 Gold</span>
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-title">World Scholar's Cup</div>
+        <div class="achievement-detail">11 Gold medals · 15 Silver medals · 3 trophies. Global academic competition spanning debate, writing, and collaborative events.</div>
+        <div class="achievement-note">Featured on national news coverage for tournament performance.</div>
+      </div>
+      <div class="achievement-card reveal delay-3">
+        <span class="achievement-medal medal-gold">3× 1st</span>
+        <div class="achievement-icon">♟</div>
+        <div class="achievement-title">Chess — Triple Champion</div>
+        <div class="achievement-detail">Three-time First Place in competitive chess tournaments. Pattern recognition meets strategic depth.</div>
+      </div>
+      <div class="achievement-card reveal delay-4">
+        <span class="achievement-medal medal-gold">1st Place</span>
+        <div class="achievement-icon">📖</div>
+        <div class="achievement-title">Quran Recitation Competition</div>
+        <div class="achievement-detail">First place in formal Quran recitation — precision, memorisation, and delivery judged by scholars.</div>
+      </div>
+      <div class="achievement-card reveal delay-2">
+        <span class="achievement-medal medal-blue">July 2025</span>
+        <div class="achievement-icon">💼</div>
+        <div class="achievement-title">Alef Capital — Internship</div>
+        <div class="achievement-detail">Finance &amp; investment internship at Alef Capital. Exposure to real-world financial analysis and capital markets.</div>
+      </div>
+      <div class="achievement-card reveal delay-3">
+        <span class="achievement-medal medal-silver">Diamond 3</span>
+        <div class="achievement-icon">🎮</div>
+        <div class="achievement-title">Rainbow Six Siege — Peak Rank</div>
+        <div class="achievement-detail">Peak Diamond 3 rank in Rainbow Six Siege as IGL for Cipher 6. Top percentage of competitive players globally.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 7. SKILLS ══ -->
+<section id="skills">
+  <div class="section-inner">
+    <p class="section-label reveal" style="text-align:center">Capabilities</p>
+    <h2 class="section-title reveal delay-1" style="text-align:center;margin-bottom:3rem">Skills &amp;<br><span style="color:var(--purple-light)">Expertise</span></h2>
+    <div class="skills-container">
+      <div class="reveal delay-1">
+        <div class="skill-bar-group"><div class="skill-bar-header"><span class="skill-name">Video Editing</span></div><div class="skill-track"><div class="skill-fill" data-width="88"></div></div></div>
+        <div class="skill-bar-group"><div class="skill-bar-header"><span class="skill-name">Content Creation</span></div><div class="skill-track"><div class="skill-fill" data-width="92"></div></div></div>
+        <div class="skill-bar-group"><div class="skill-bar-header"><span class="skill-name">Strategic Leadership</span></div><div class="skill-track"><div class="skill-fill" data-width="90"></div></div></div>
+        <div class="skill-bar-group"><div class="skill-bar-header"><span class="skill-name">Public Speaking</span></div><div class="skill-track"><div class="skill-fill" data-width="85"></div></div></div>
+        <div class="skill-bar-group"><div class="skill-bar-header"><span class="skill-name">Mechanical Engineering</span></div><div class="skill-track"><div class="skill-fill" data-width="70"></div></div></div>
+      </div>
+      <div class="reveal-right delay-2">
+        <p class="section-label" style="margin-bottom:1.2rem">Languages Spoken</p>
+        <div class="lang-cloud" style="margin-bottom:3rem">
+          <span class="lang-tag">English</span><span class="lang-tag">Arabic</span><span class="lang-tag">Urdu</span><span class="lang-tag">Hindi</span>
+        </div>
+        <p class="section-label" style="margin-bottom:1.2rem">Tools &amp; Software</p>
+        <div class="lang-cloud">
+          <span class="lang-tag" style="color:var(--blue-light);border-color:rgba(96,165,250,.3);background:rgba(37,99,235,.1)">Filmora</span>
+          <span class="lang-tag" style="color:var(--blue-light);border-color:rgba(96,165,250,.3);background:rgba(37,99,235,.1)">Twitch Studio</span>
+          <span class="lang-tag" style="color:var(--blue-light);border-color:rgba(96,165,250,.3);background:rgba(37,99,235,.1)">OBS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 8. CONTACT ══ -->
+<section id="contact">
+  <div class="contact-glow"></div>
+  <div class="section-inner" style="text-align:center">
+    <p class="section-label reveal">Let's Connect</p>
+    <h2 class="section-title reveal delay-1">Get In<br><span style="color:var(--purple-light)">Touch</span></h2>
+    <p class="reveal delay-2" style="color:var(--muted);font-size:1.05rem;max-width:500px;margin:0 auto 1rem">Whether it's collaboration, opportunity, or just a conversation — I'm always open.</p>
+    <div class="contact-links reveal delay-3">
+      <a href="mailto:yousuf.draco@gmail.com" class="contact-link"><span class="contact-link-icon">✉</span>yousuf.draco@gmail.com</a>
+      <a href="#" class="contact-link"><span class="contact-link-icon">▶</span>youtube.com/@YusiDraco</a>
+      <a href="#" class="contact-link"><span class="contact-link-icon">◈</span>twitch.tv/YusiDraco</a>
+    </div>
+    <a href="mailto:yousuf.draco@gmail.com" class="cta-button reveal delay-4">✦ &nbsp; Open to Opportunities</a>
+  </div>
+</section>
+
+<footer>© 2026 YOUSUF ALAM · ENGINEER · CREATOR · COMPETITOR · BUILT WITH CRAFT</footer>
+
+<script>
+/* ══════════════════════════════════════════════
+   NEURAL NETWORK CANVAS (global, fixed)
+══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('neural-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, mouse = {x:-999,y:-999};
+  const COUNT = 200;
+  const CONNECT_DIST = 130;
+  const MOUSE_ATTRACT = 160;
+  const particles = [];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+
+  const COLORS = [
+    'rgba(255,255,255,ALPHA)',
+    'rgba(96,165,250,ALPHA)',
+    'rgba(96,165,250,ALPHA)',
+    'rgba(168,85,247,ALPHA)',
+    'rgba(255,255,255,ALPHA)',
+  ];
+
+  for(let i = 0; i < COUNT; i++){
+    const colorTemplate = COLORS[Math.floor(Math.random()*COLORS.length)];
+    particles.push({
+      x: Math.random()*window.innerWidth,
+      y: Math.random()*window.innerHeight,
+      vx: (Math.random()-0.5)*0.5,
+      vy: (Math.random()-0.5)*0.5,
+      r: Math.random()*1.8+0.5,
+      colorTemplate,
+      phase: Math.random()*Math.PI*2,
+      phaseSpeed: Math.random()*0.015+0.005,
+      baseAlpha: Math.random()*0.5+0.2,
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Update + draw particles
+    for(let i = 0; i < COUNT; i++){
+      const p = particles[i];
+      p.phase += p.phaseSpeed;
+      const alpha = p.baseAlpha * (0.5 + 0.5*Math.sin(p.phase));
+
+      // Mouse attraction
+      const dx = mouse.x - p.x, dy = mouse.y - p.y;
+      const d = Math.sqrt(dx*dx+dy*dy);
+      if(d < MOUSE_ATTRACT && d > 0){
+        const force = (MOUSE_ATTRACT-d)/MOUSE_ATTRACT * 0.04;
+        p.vx += dx/d * force;
+        p.vy += dy/d * force;
+      }
+      // Dampen velocity
+      p.vx *= 0.99; p.vy *= 0.99;
+      // Clamp speed
+      const spd = Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+      if(spd > 1.5){ p.vx = p.vx/spd*1.5; p.vy = p.vy/spd*1.5; }
+
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0) p.x = W; if(p.x > W) p.x = 0;
+      if(p.y < 0) p.y = H; if(p.y > H) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = p.colorTemplate.replace('ALPHA', alpha.toFixed(2));
+      ctx.fill();
+    }
+
+    // Connection lines
+    for(let i = 0; i < COUNT; i++){
+      for(let j = i+1; j < COUNT; j++){
+        const a = particles[i], b = particles[j];
+        const dx = a.x-b.x, dy = a.y-b.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < CONNECT_DIST){
+          const t = 1 - dist/CONNECT_DIST;
+          const alpha = t * 0.25;
+          // Color blend: use blue for most, purple for some
+          const isP = (i+j) % 5 === 0;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = isP
+            ? `rgba(168,85,247,${alpha.toFixed(3)})`
+            : `rgba(96,165,250,${alpha.toFixed(3)})`;
+          ctx.lineWidth = t * 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══════════════════════════════════════════════
+   HERO CANVAS — star field + nebula + explosion
+══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, burst = [];
+  const stars = [];
+
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  for(let i=0;i<260;i++) stars.push({
+    x:Math.random(), y:Math.random(),
+    r:Math.random()*1.4+0.2,
+    a:Math.random()*0.7+0.3,
+    t:Math.random()*Math.PI*2,
+    s:Math.random()*0.018+0.004
+  });
+
+  function spawnBurst(){
+    for(let i=0;i<130;i++){
+      const a=Math.random()*Math.PI*2, spd=Math.random()*3+0.6;
+      const life = Math.random()*130+70;
+      burst.push({x:W/2,y:H*.42,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-0.8,
+        r:Math.random()*2.5+0.5,life,maxLife:life,
+        hue: Math.random()<.5 ? 210+Math.random()*40 : 270+Math.random()*20 });
+    }
+  }
+  setTimeout(spawnBurst, 1100);
+
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.t+=s.s;
+      const al = s.a*(0.6+0.4*Math.sin(s.t));
+      ctx.beginPath(); ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${al})`; ctx.fill();
+    });
+    // Nebula wisps
+    const t=frame*.002;
+    for(let i=0;i<3;i++){
+      const gx=W*(0.3+0.4*Math.sin(t+i*2.1)), gy=H*(0.3+0.3*Math.cos(t+i*1.7));
+      const gr=ctx.createRadialGradient(gx,gy,0,gx,gy,220);
+      gr.addColorStop(0,i%2===0?'rgba(107,33,168,.06)':'rgba(37,99,235,.05)');
+      gr.addColorStop(1,'transparent');
+      ctx.fillStyle=gr; ctx.fillRect(0,0,W,H);
+    }
+    burst=burst.filter(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vx*=.97; p.vy*=.97; p.vy+=.02; p.life--;
+      const al=p.life/p.maxLife;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${p.hue},100%,70%,${al})`; ctx.fill();
+      return p.life>0;
+    });
+    frame++; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══════════════════════════════════════════════
+   SVG OPERATORS — Esports section
+══════════════════════════════════════════════ */
+(function(){
+  const container = document.getElementById('operators-container');
+  const section = document.getElementById('esports');
+  let spawned = false;
+
+  // SVG operator definition
+  const opSVG = `<svg viewBox="0 0 80 200" xmlns="http://www.w3.org/2000/svg" class="op-svg">
+    <defs>
+      <filter id="glow2">
+        <feGaussianBlur stdDeviation="2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Helmet -->
+    <ellipse cx="38" cy="38" rx="16" ry="17" fill="#141830"/>
+    <ellipse cx="38" cy="32" rx="10" ry="6" fill="#1a2040"/>
+    <!-- Visor -->
+    <rect x="23" y="42" width="30" height="8" rx="3" fill="#60A5FA" opacity="0.35"/>
+    <rect x="23" y="42" width="30" height="8" rx="3" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.9" filter="url(#glow2)"/>
+    <!-- Helmet details -->
+    <rect x="31" y="26" width="4" height="2" rx="1" fill="#252d52"/>
+    <rect x="41" y="26" width="4" height="2" rx="1" fill="#252d52"/>
+    <!-- Neck -->
+    <rect x="33" y="55" width="10" height="7" rx="2" fill="#111428"/>
+    <!-- Chest armor -->
+    <path d="M17 62 L59 62 L63 105 L13 105 Z" fill="#131728"/>
+    <!-- Chest plate -->
+    <rect x="25" y="65" width="26" height="16" rx="2" fill="#1c2244" stroke="#252d52" stroke-width="0.5"/>
+    <!-- Pouches -->
+    <rect x="17" y="65" width="8" height="9" rx="1.5" fill="#181e38" stroke="#252d52" stroke-width="0.5"/>
+    <rect x="51" y="65" width="8" height="9" rx="1.5" fill="#181e38" stroke="#252d52" stroke-width="0.5"/>
+    <rect x="17" y="76" width="8" height="7" rx="1.5" fill="#181e38" stroke="#252d52" stroke-width="0.5"/>
+    <rect x="51" y="76" width="8" height="7" rx="1.5" fill="#181e38" stroke="#252d52" stroke-width="0.5"/>
+    <!-- Harness connector -->
+    <circle cx="38" cy="62" r="4" fill="#1a2040" stroke="#60A5FA" stroke-width="1.2"/>
+    <!-- Harness straps -->
+    <line x1="38" y1="62" x2="26" y2="62" stroke="#1e2a50" stroke-width="1.5"/>
+    <line x1="38" y1="62" x2="50" y2="62" stroke="#1e2a50" stroke-width="1.5"/>
+    <!-- Left arm raised -->
+    <path d="M17 66 L8 50 L12 47 L21 63" fill="#111428"/>
+    <ellipse cx="10" cy="48" rx="5" ry="5" fill="#111428" stroke="#252d52" stroke-width="0.5"/>
+    <!-- Right arm + weapon -->
+    <path d="M59 68 L70 76 L68 82 L57 73" fill="#111428"/>
+    <!-- Rifle body -->
+    <rect x="64" y="73" width="28" height="6" rx="2" fill="#0b0e1e"/>
+    <rect x="68" y="69" width="10" height="5" rx="1" fill="#111428"/>
+    <!-- Barrel -->
+    <rect x="88" y="75" width="10" height="2.5" rx="0.8" fill="#080c18"/>
+    <!-- Scope -->
+    <rect x="71" y="71" width="8" height="3.5" rx="1" fill="#0b0e1e" stroke="#252d52" stroke-width="0.5"/>
+    <!-- Stock -->
+    <rect x="64" y="75" width="5" height="6" rx="1" fill="#0b0e1e"/>
+    <!-- Left leg -->
+    <path d="M13 105 L22 105 L24 152 L15 153 Z" fill="#131728"/>
+    <!-- Right leg -->
+    <path d="M54 105 L63 105 L63 152 L54 153 Z" fill="#131728"/>
+    <!-- Knee pads -->
+    <ellipse cx="18" cy="128" rx="5" ry="6" fill="#181e38" stroke="#252d52" stroke-width="0.5"/>
+    <ellipse cx="58" cy="128" rx="5" ry="6" fill="#181e38" stroke="#252d52" stroke-width="0.5"/>
+    <!-- Boots -->
+    <rect x="12" y="150" width="13" height="9" rx="2" fill="#0b0e1e"/>
+    <rect x="52" y="150" width="13" height="9" rx="2" fill="#0b0e1e"/>
+    <rect x="11" y="157" width="15" height="3" rx="1" fill="#080c18"/>
+    <rect x="51" y="157" width="15" height="3" rx="1" fill="#080c18"/>
+  </svg>`;
+
+  // Muzzle flash SVG
+  const flashSVG = `<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:30px;height:30px;top:68px;left:88px;pointer-events:none;opacity:0;transition:opacity .05s" class="mflash">
+    <circle cx="10" cy="15" r="10" fill="rgba(255,200,80,.9)"/>
+    <circle cx="10" cy="15" r="6" fill="rgba(255,255,200,1)"/>
+    <polygon points="20,15 30,10 28,15 30,20" fill="rgba(255,160,40,.8)"/>
+    <polygon points="10,5 12,0 14,5" fill="rgba(255,200,80,.7)"/>
+    <polygon points="10,25 12,30 14,25" fill="rgba(255,200,80,.7)"/>
+  </svg>`;
+
+  function spawnOperators(){
+    if(spawned) return; spawned=true;
+    const positions = [8,22,38,55,72]; // % left
+    const delays = [0,2.5,5,1.5,3.8];
+    positions.forEach((left,i)=>{
+      const wrap = document.createElement('div');
+      wrap.className = 'operator-wrap';
+      wrap.style.left = left+'%';
+      wrap.style.animationDelay = delays[i]+'s';
+      wrap.innerHTML = `<div class="op-rope"></div>${opSVG}${flashSVG}`;
+      container.appendChild(wrap);
+      // Random muzzle flashes
+      setInterval(()=>{
+        if(Math.random()<0.35){
+          const flash = wrap.querySelector('.mflash');
+          if(flash){ flash.style.opacity='1'; setTimeout(()=>flash.style.opacity='0',80+Math.random()*60); }
+        }
+      }, 1500+Math.random()*2000);
+    });
+  }
+
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) spawnOperators(); });
+  },{threshold:.15});
+  obs.observe(section);
+})();
+
+/* ══════════════════════════════════════════════
+   ESPORTS CANVAS — Muzzle flashes / sparks BG
+══════════════════════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('esports-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,flashes=[],sparks=[],active=false;
+  function resize(){ W=canvas.width=canvas.offsetWidth||window.innerWidth; H=canvas.height=canvas.offsetHeight||window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+  function draw(){
+    ctx.clearRect(0,0,W,H); resize();
+    if(active && Math.random()<0.035){
+      const x=Math.random()*W,y=Math.random()*H*0.6;
+      flashes.push({x,y,r:0,maxR:Math.random()*35+18,a:1,life:16});
+      for(let i=0;i<10;i++){
+        const ang=Math.random()*Math.PI*2,spd=Math.random()*4+1;
+        sparks.push({x,y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,a:1,life:Math.random()*22+10,maxLife:32});
+      }
+    }
+    flashes=flashes.filter(f=>{
+      f.r+=(f.maxR-f.r)*.3; f.life--; f.a=f.life/16;
+      const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r);
+      g.addColorStop(0,`rgba(255,220,100,${f.a*.7})`);
+      g.addColorStop(.4,`rgba(255,100,40,${f.a*.3})`);
+      g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fill();
+      return f.life>0;
+    });
+    sparks=sparks.filter(s=>{
+      s.x+=s.vx; s.y+=s.vy; s.vy+=.1; s.life--; s.a=s.life/s.maxLife;
+      ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(s.x-s.vx*2,s.y-s.vy*2);
+      ctx.strokeStyle=`rgba(255,200,80,${s.a})`; ctx.lineWidth=1.5; ctx.stroke();
+      return s.life>0;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  const obs=new IntersectionObserver(e=>e.forEach(x=>active=x.isIntersecting),{threshold:.2});
+  obs.observe(document.getElementById('esports'));
+})();
+
+/* ══════════════════════════════════════════════
+   SPACE BATTLE — Proper TIE fighters + X-Wings
+══════════════════════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('space-battle-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,ships=[],bolts=[],dust=[],active=false,spawnT=0;
+
+  function resize(){ W=canvas.width=canvas.offsetWidth||window.innerWidth; H=canvas.height=canvas.offsetHeight||window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  // Dust particles
+  for(let i=0;i<120;i++) dust.push({x:Math.random(),y:Math.random(),r:Math.random()*0.8+0.2,a:Math.random()*0.25+0.05,vx:(Math.random()-.5)*.15});
+
+  function drawTIE(x,y,s,alpha){
+    ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y);
+    const hw=s*1.3, hh=s*2.6, indent=hw*.18;
+    function hexPanel(cx){
+      ctx.beginPath();
+      ctx.moveTo(cx-hw+indent,-hh); ctx.lineTo(cx+hw-indent,-hh);
+      ctx.lineTo(cx+hw,-hh*.55);   ctx.lineTo(cx+hw,hh*.55);
+      ctx.lineTo(cx+hw-indent,hh);  ctx.lineTo(cx-hw+indent,hh);
+      ctx.lineTo(cx-hw,hh*.55);    ctx.lineTo(cx-hw,-hh*.55);
+      ctx.closePath();
+    }
+    // Left panel
+    hexPanel(-s*2.1);
+    ctx.fillStyle='rgba(16,20,42,.95)'; ctx.fill();
+    ctx.strokeStyle='rgba(96,165,250,.7)'; ctx.lineWidth=.8; ctx.stroke();
+    // Panel grid lines left
+    ctx.strokeStyle='rgba(96,165,250,.18)'; ctx.lineWidth=.4;
+    for(let r=-3;r<=3;r++){
+      const py=r*(hh/3.5);
+      ctx.beginPath(); ctx.moveTo(-s*2.1-hw*.4,py); ctx.lineTo(-s*2.1+hw*.4,py); ctx.stroke();
+    }
+    // Right panel
+    hexPanel(s*2.1);
+    ctx.fillStyle='rgba(16,20,42,.95)'; ctx.fill();
+    ctx.strokeStyle='rgba(96,165,250,.7)'; ctx.lineWidth=.8; ctx.stroke();
+    ctx.strokeStyle='rgba(96,165,250,.18)'; ctx.lineWidth=.4;
+    for(let r=-3;r<=3;r++){
+      const py=r*(hh/3.5);
+      ctx.beginPath(); ctx.moveTo(s*2.1-hw*.4,py); ctx.lineTo(s*2.1+hw*.4,py); ctx.stroke();
+    }
+    // Connector rods
+    ctx.strokeStyle='rgba(70,85,120,.9)'; ctx.lineWidth=1.3;
+    [[-1.55,-0.35],[-1.55,0.35],[1.55,-0.35],[1.55,0.35]].forEach(([mx,my])=>{
+      ctx.beginPath(); ctx.moveTo(mx*s,my*s); ctx.lineTo(mx*.45*s,my*.3*s); ctx.stroke();
+    });
+    // Cockpit sphere
+    const grad=ctx.createRadialGradient(-s*.2,-s*.2,0,0,0,s*.88);
+    grad.addColorStop(0,'#2a3a70'); grad.addColorStop(.6,'#0d1230'); grad.addColorStop(1,'#060812');
+    ctx.fillStyle=grad;
+    ctx.strokeStyle='rgba(96,165,250,.8)'; ctx.lineWidth=.8;
+    ctx.beginPath(); ctx.arc(0,0,s*.88,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    // Viewport ring
+    ctx.strokeStyle='rgba(96,165,250,.35)'; ctx.lineWidth=.6;
+    ctx.beginPath(); ctx.arc(0,0,s*.48,0,Math.PI*2); ctx.stroke();
+    // Center glow
+    const cg=ctx.createRadialGradient(0,0,0,0,0,s*.18);
+    cg.addColorStop(0,'rgba(96,165,250,.9)'); cg.addColorStop(1,'transparent');
+    ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(0,0,s*.18,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawXWing(x,y,s,alpha,facingLeft){
+    ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y);
+    if(facingLeft) ctx.scale(-1,1);
+    const fc='#141830', sc='rgba(168,85,247,.75)';
+    ctx.lineWidth=.9;
+    // Upper-left wing
+    ctx.beginPath(); ctx.moveTo(-s*.4,-s*.3); ctx.lineTo(-s*2.8,-s*2.2); ctx.lineTo(-s*2.4,-s*2.5); ctx.lineTo(s*.2,-s*.5); ctx.closePath();
+    ctx.fillStyle=fc; ctx.fill(); ctx.strokeStyle=sc; ctx.stroke();
+    // Upper-right wing
+    ctx.beginPath(); ctx.moveTo(s*.4,-s*.3); ctx.lineTo(s*2.8,-s*2.2); ctx.lineTo(s*2.4,-s*2.5); ctx.lineTo(-s*.2,-s*.5); ctx.closePath();
+    ctx.fillStyle=fc; ctx.fill(); ctx.strokeStyle=sc; ctx.stroke();
+    // Lower-left wing
+    ctx.beginPath(); ctx.moveTo(-s*.4,s*.3); ctx.lineTo(-s*2.8,s*2.2); ctx.lineTo(-s*2.4,s*2.5); ctx.lineTo(s*.2,s*.5); ctx.closePath();
+    ctx.fillStyle=fc; ctx.fill(); ctx.strokeStyle=sc; ctx.stroke();
+    // Lower-right wing
+    ctx.beginPath(); ctx.moveTo(s*.4,s*.3); ctx.lineTo(s*2.8,s*2.2); ctx.lineTo(s*2.4,s*2.5); ctx.lineTo(-s*.2,s*.5); ctx.closePath();
+    ctx.fillStyle=fc; ctx.fill(); ctx.strokeStyle=sc; ctx.stroke();
+    // Fuselage
+    ctx.beginPath();
+    ctx.moveTo(-s*3.2,-s*.32); ctx.lineTo(s*1.6,-s*.42); ctx.lineTo(s*2.4,0);
+    ctx.lineTo(s*1.6,s*.42);   ctx.lineTo(-s*3.2,s*.32); ctx.closePath();
+    ctx.fillStyle='#111626'; ctx.fill(); ctx.strokeStyle=sc; ctx.stroke();
+    // Cockpit
+    const cpg=ctx.createRadialGradient(s*.4,-s*.05,0,s*.4,0,s*.55);
+    cpg.addColorStop(0,'rgba(168,85,247,.5)'); cpg.addColorStop(1,'rgba(100,40,180,.1)');
+    ctx.fillStyle=cpg;
+    ctx.beginPath(); ctx.ellipse(s*.4,0,s*.6,s*.32,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(168,85,247,.6)'; ctx.lineWidth=.8;
+    ctx.beginPath(); ctx.ellipse(s*.4,0,s*.6,s*.32,0,0,Math.PI*2); ctx.stroke();
+    // Engine glow
+    const eg=ctx.createRadialGradient(-s*3.1,0,0,-s*3.1,0,s*.9);
+    eg.addColorStop(0,'rgba(168,85,247,1)'); eg.addColorStop(.35,'rgba(168,85,247,.4)'); eg.addColorStop(1,'transparent');
+    ctx.fillStyle=eg; ctx.beginPath(); ctx.arc(-s*3.1,0,s*.9,0,Math.PI*2); ctx.fill();
+    // Wing-tip cannons
+    ctx.fillStyle='#1a1a36';
+    [[-s*2.55,-s*2.3],[s*2.55,-s*2.3],[-s*2.55,s*2.3],[s*2.55,s*2.3]].forEach(([cx,cy])=>{
+      ctx.beginPath(); ctx.rect(cx-s*.12,cy-s*.07,s*.28,s*.14); ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  function spawnShip(){
+    const isTIE=Math.random()<.55, fromLeft=Math.random()<.5;
+    const spd=isTIE ? (Math.random()*2.2+2.2) : (Math.random()*1.4+1.4);
+    ships.push({
+      x:fromLeft?-80:W+80, y:H*(0.1+Math.random()*0.8),
+      vx:fromLeft?spd:-spd, vy:(Math.random()-.5)*.5,
+      type:isTIE?'tie':'xwing', size:isTIE?(Math.random()*6+10):(Math.random()*6+12),
+      alpha:Math.random()*.35+0.5, facingLeft:!fromLeft,
+    });
+  }
+
+  function spawnBolt(ship){
+    const dir=ship.vx>0?1:-1;
+    bolts.push({
+      x:ship.x, y:ship.y,
+      vx:dir*(Math.random()*8+12), vy:(Math.random()-.5)*1,
+      len:Math.random()*30+20,
+      life:Math.random()*30+15,
+      color:ship.type==='tie'?'rgba(96,165,250,1)':'rgba(220,50,50,1)',
+    });
+  }
+
+  let boltTimer=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H); resize();
+    // Dust field
+    dust.forEach(d=>{
+      d.x+=d.vx/W; if(d.x<0)d.x=1; if(d.x>1)d.x=0;
+      ctx.beginPath(); ctx.arc(d.x*W,d.y*H,d.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${d.a})`; ctx.fill();
+    });
+    if(active){ spawnT++; if(spawnT>65){spawnShip();spawnT=0;} boltTimer++; }
+    // Laser bolts
+    if(active && ships.length && boltTimer>18 && Math.random()<.3){
+      spawnBolt(ships[Math.floor(Math.random()*ships.length)]);
+      boltTimer=0;
+    }
+    bolts=bolts.filter(b=>{
+      b.x+=b.vx; b.y+=b.vy; b.life--;
+      ctx.beginPath(); ctx.moveTo(b.x,b.y); ctx.lineTo(b.x-b.vx*b.len/15,b.y-b.vy*b.len/15);
+      ctx.strokeStyle=b.color; ctx.lineWidth=1.8; ctx.stroke();
+      // Glow
+      ctx.strokeStyle=b.color.replace('1)','0.3)'); ctx.lineWidth=4; ctx.stroke();
+      return b.life>0 && b.x>-100 && b.x<W+100;
+    });
+    ships=ships.filter(s=>{
+      s.x+=s.vx; s.y+=s.vy;
+      if(s.type==='tie') drawTIE(s.x,s.y,s.size,s.alpha);
+      else drawXWing(s.x,s.y,s.size,s.alpha,s.facingLeft);
+      return s.x>-300 && s.x<W+300;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  const obs=new IntersectionObserver(e=>e.forEach(x=>active=x.isIntersecting),{threshold:.1});
+  obs.observe(document.getElementById('hobbies'));
+})();
+
+/* ══════════════════════════════════════════════
+   INTERSECTION OBSERVER — Reveal animations
+══════════════════════════════════════════════ */
+(function(){
+  const els=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+  },{threshold:.12});
+  els.forEach(el=>obs.observe(el));
+})();
+
+/* ══════════════════════════════════════════════
+   SKILL BARS
+══════════════════════════════════════════════ */
+(function(){
+  const fills=document.querySelectorAll('.skill-fill');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){setTimeout(()=>e.target.style.width=e.target.dataset.width+'%',300);obs.unobserve(e.target);} });
+  },{threshold:.4});
+  fills.forEach(f=>obs.observe(f));
+})();
+
+/* ══════════════════════════════════════════════
+   GLITCH TEXT EFFECT — fires randomly on headings
+══════════════════════════════════════════════ */
+(function(){
+  const CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*!?><';
+  const headings=[...document.querySelectorAll('.section-title')];
+  let locked=false;
+
+  function glitch(el){
+    if(locked) return; locked=true;
+    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    const nodes=[]; const originals=[];
+    let node;
+    while((node=walker.nextNode())){
+      if(node.textContent.trim()){nodes.push(node);originals.push(node.textContent);}
+    }
+    let iter=0; const maxIter=22;
+    const iv=setInterval(()=>{
+      nodes.forEach((n,ni)=>{
+        const orig=originals[ni];
+        n.textContent=orig.split('').map((ch,i)=>{
+          if(ch===' '||ch==='\n') return ch;
+          if(iter>maxIter*.55 && i<(iter/maxIter)*orig.length*1.4) return ch;
+          return Math.random()<.3?CHARS[Math.floor(Math.random()*CHARS.length)]:ch;
+        }).join('');
+      });
+      iter++;
+      if(iter>=maxIter){
+        clearInterval(iv);
+        nodes.forEach((n,ni)=>{n.textContent=originals[ni];});
+        locked=false;
+      }
+    },45);
+  }
+
+  function scheduleGlitch(){
+    const delay=4000+Math.random()*6000;
+    setTimeout(()=>{
+      const el=headings[Math.floor(Math.random()*headings.length)];
+      if(el) glitch(el);
+      scheduleGlitch();
+    },delay);
+  }
+  scheduleGlitch();
+})();
+</script>
+</body>
+</html>
